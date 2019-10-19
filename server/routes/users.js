@@ -6,6 +6,7 @@ import User from '../models/users';
 
 const router = express.Router();
 
+// USER REGISTRATION
 router.post('/signup', (req, res) => {
   User.find({ email: req.body.email })
     .exec()
@@ -62,6 +63,7 @@ router.post('/signup', (req, res) => {
     });
 });
 
+// USER LOGIN
 router.post('/login', (req, res) => {
   User.find({ email: req.body.email })
     .exec()
