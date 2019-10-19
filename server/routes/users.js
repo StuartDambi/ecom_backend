@@ -1,6 +1,7 @@
 import express from 'express';
 import mongoose from 'mongoose';
 import bcrypt from 'bcrypt';
+import jwt from 'jsonwebtoken';
 import User from '../models/users';
 
 const router = express.Router();
@@ -18,7 +19,7 @@ router.post('/signup', (req, res) => {
       }
 
       // eslint-disable-next-line consistent-return
-      bcrypt.hash(req.body.password2, 10, (err, hash) => {
+      bcrypt.hash(req.body.password, 10, (err, hash) => {
         if (err) {
           return res.status(500).json({
             status: res.statusCode,
@@ -39,8 +40,7 @@ router.post('/signup', (req, res) => {
           postCode: req.body.postCode,
           country: req.body.country,
           state: req.body.state,
-          password: req.body.password,
-          password2: hash,
+          password: hash,
 
         });
         newUser.save()
@@ -59,6 +59,48 @@ router.post('/signup', (req, res) => {
             });
           });
       });
+    });
+});
+
+router.post('/login', (req, res) => {
+  User.find({ email: req.body.email })
+    .exec()
+    // eslint-disable-next-line consistent-return
+    .then((user) => {
+      if (user.length < 1) {
+        return res.status(401).json({
+          status: res.statusCode,
+          message: 'Authentication failed',
+        });
+      }
+      // eslint-disable-next-line consistent-return
+      bcrypt.compare(req.body.password, user[0].password, (err, result) => {
+        if (err) {
+          return res.status(401).json({
+            message: 'Authentication failed',
+          });
+        }
+        if (result) {
+          const token = jwt.sign({
+            email: user[0].email,
+            // eslint-disable-next-line no-underscore-dangle
+            userId: user[0]._id,
+          }, process.env.JWT_KEY,
+          {
+            expiresIn: '1h',
+          });
+          return res.status(200).json({
+            status: res.statusCode,
+            message: 'Authentication successful',
+            token,
+          });
+        }
+      });
+    })
+    .catch((error) => {
+      // eslint-disable-next-line no-console
+      console.log(error);
+      return res.status(500).json({ error });
     });
 });
 

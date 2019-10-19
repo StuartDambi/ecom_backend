@@ -18,6 +18,5 @@ const userSchema = mongoose.Schema({
   country: { type: String, required: true },
   state: { type: String, required: true },
   password: { type: String, required: true },
-  password2: { type: String, required: true },
 });
 module.exports = mongoose.model('User', userSchema);
