@@ -14,6 +14,7 @@ app.set('view engine', 'hbs');
 app.use(express.json());
 app.use('/api/auth', userRoute);
 
+// Connect to Database
 // eslint-disable-next-line prefer-template
 mongoose.connect('mongodb+srv://Admin:' + process.env.MONGO_ATLAS_PWD + '@cluster0-3dega.mongodb.net/test?retryWrites=true&w=majority', {
   useNewUrlParser: true,
