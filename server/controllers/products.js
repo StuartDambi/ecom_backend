@@ -4,18 +4,37 @@ import Product from '../models/products';
 const productController = {
   // Get all products
   getProducts: (req, res) => {
-    Product.find((err, docs) => {
-      if (err) {
-        return res.status(500).json({
+    Product.find().select('productName productPrice productWeight productDescription productBrand productOption _id')
+      .exec()
+      .then((docs) => {
+        const response = {
+          count: docs.length,
+          products: docs.map((doc) => ({
+            // eslint-disable-next-line no-underscore-dangle
+            _id: doc._id,
+            productName: doc.productName,
+            productPrice: doc.productPrice,
+            productWeight: doc.productWeight,
+            productDescription: doc.productDescription,
+            productBrand: doc.productBrand,
+            productImage: doc.productImage,
+            productOption: doc.productOption,
+            productCategoryId: doc.productCategoryId,
+            request: {
+              type: 'GET',
+              // eslint-disable-next-line no-underscore-dangle
+              url: `localhost:5000/api/products/${doc._id}`,
+            },
+          })),
+        };
+        return res.status(200).json({
           status: res.statusCode,
-          err,
+          response,
         });
-      }
-      return res.status(200).json({
-        status: res.statusCode,
-        docs,
-      });
-    });
+      })
+      .catch((error) => res.status(500).json({
+        error,
+      }));
   },
   //   Get one Product
   getProduct: (req, res) => {
@@ -104,7 +123,11 @@ const productController = {
         if (result) {
           return res.status(200).json({
             status: res.statusCode,
-            result,
+            message: 'Product updated',
+            request: {
+              type: 'GET',
+              url: `localhost:5000/api/products/${id}`,
+            },
           });
         }
         return res.status(404).json({

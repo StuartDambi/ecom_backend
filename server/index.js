@@ -39,6 +39,7 @@ mongoose.connect('mongodb+srv://Admin:' + process.env.MONGO_ATLAS_PWD + '@cluste
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
+mongoose.Promise = global.Promise;
 
 const port = process.env.PORT || 5000;
 // eslint-disable-next-line no-console
