@@ -8,7 +8,6 @@ const productSchema = mongoose.Schema({
   productDescription: { type: String, required: true },
   productCategoryId: { type: Number },
   productBrand: { type: String, required: true },
-  productImage: { type: String, required: true },
   productOption: { type: String },
   productUpdateDate: { type: Date, default: Date.now },
 });

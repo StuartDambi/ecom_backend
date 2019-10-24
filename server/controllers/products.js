@@ -17,7 +17,6 @@ const productController = {
             productWeight: doc.productWeight,
             productDescription: doc.productDescription,
             productBrand: doc.productBrand,
-            productImage: doc.productImage,
             productOption: doc.productOption,
             productCategoryId: doc.productCategoryId,
             request: {
