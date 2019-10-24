@@ -6,6 +6,7 @@ const ordersController = {
   getOrders: (req, res) => {
     Order.find()
       .select('product quantity comment _id')
+      .populate('product', 'productName productPrice productDescription')
       .exec()
       .then((docs) => {
         if (!docs) {
@@ -33,6 +34,18 @@ const ordersController = {
       })
       .catch((error) => res.status(500).json({
         message: 'Something went wrong',
+        error,
+      }));
+  },
+  // Get one order
+  getOrder: (req, res) => {
+    Order.findById(req.params.orderId)
+      .populate('product')
+      .exec()
+      .then((result) => res.status(200).json({
+        result,
+      }))
+      .catch((error) => res.status(500).json({
         error,
       }));
   },

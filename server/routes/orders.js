@@ -10,7 +10,7 @@ router.post('/', ordersController.addOrder);
 router.get('/', ordersController.getOrders);
 
 // Get single order
-// router.get('/:orderId', ordersController.getOrder);
+router.get('/:orderId', ordersController.getOrder);
 
 // Update the Order
 // router.patch('/:orderId', ordersController.updateOrder);
