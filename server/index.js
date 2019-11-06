@@ -38,7 +38,12 @@ app.use('/api/products', productRoute);
 mongoose.connect('mongodb+srv://Admin:' + process.env.MONGO_ATLAS_PWD + '@cluster0-3dega.mongodb.net/test?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-});
+})
+  // eslint-disable-next-line no-console
+  .then((res) => console.log('Connected', res))
+  // eslint-disable-next-line no-console
+  .catch((error) => console.log(error));
+
 mongoose.Promise = global.Promise;
 
 const port = process.env.PORT || 5000;
